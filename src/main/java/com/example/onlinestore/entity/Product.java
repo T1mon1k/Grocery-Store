@@ -3,6 +3,8 @@ package com.example.onlinestore.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import org.hibernate.annotations.Formula;
 
 @Entity
 @Table(name = "products") // згідно з таблицею — products, не product
@@ -35,10 +37,6 @@ public class Product {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "average_rating", precision = 3, scale = 2)
-    private BigDecimal averageRating;
-
-    // Не вказані у специфікації — але якщо потрібні, залиш
     @Column(name = "brand", length = 100)
     private String brand;
 
@@ -54,11 +52,21 @@ public class Product {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        if (this.averageRating == null) {
-            this.averageRating = BigDecimal.ZERO;
-        }
+        // формульне поле averageRating не потребує ініціалізації в PrePersist
     }
-    // ======= Getters =======
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
+    @Formula(
+            "(" +
+                    "select coalesce(avg(r.rating),0) " +
+                    "from reviews r " +
+                    "where r.product_id = id" +
+                    ")"
+    )
+    private Double averageRating;
+
     public Long getId() {
         return id;
     }
@@ -103,15 +111,14 @@ public class Product {
         return createdAt;
     }
 
-    public BigDecimal getAverageRating() {
-        return averageRating;
-    }
-
     public Category getCategory() {
         return category;
     }
 
-    // ======= Setters =======
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -156,11 +163,11 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public void setAverageRating(BigDecimal averageRating) {
-        this.averageRating = averageRating;
-    }
-
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
     }
 }

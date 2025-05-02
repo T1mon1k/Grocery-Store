@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -27,11 +28,53 @@
                 <p><strong>Наявність:</strong> <span th:text="${product.stock} + ' шт.'"></span></p>
                 <p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
                 <p><strong>Додано:</strong> <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
-                <p><strong>Середня оцінка:</strong> <span th:text="${product.averageRating}"></span></p>
+                <p><strong>Середня оцінка:</strong> <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)}"></span></p>
             </div>
         </div>
     </div>
 </section>
+
+<section id="reviews">
+    <h3>Відгуки (середній:
+        <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)} + ' / 5'"></span>
+        )</h3>
+
+    <!-- Якщо є відгуки -->
+    <ul th:if="${!#lists.isEmpty(reviews)}">
+        <li th:each="r : ${reviews}">
+            <strong th:text="${r.user.username}">Автор</strong>
+            — <span th:text="${r.rating}">0</span> ★
+            <br/>
+            <small th:text="${#temporals.format(r.createdAt, 'dd.MM.yyyy HH:mm')}">
+                01.01.2025 12:00
+            </small>
+            <p th:text="${r.comment}">Коментар</p>
+        </li>
+    </ul>
+
+    <!-- Якщо відгуків ще немає -->
+    <p th:if="${#lists.isEmpty(reviews)}">Поки що немає відгуків.</p>
+
+    <!-- Форма тільки для аутентифікованих -->
+    <div sec:authorize="isAuthenticated()">
+        <form th:action="@{/products/{id}/reviews(id=${product.id})}" method="post">
+            <label>Оцінка:
+                <select name="rating">
+                    <option th:each="i : ${#numbers.sequence(0,5)}"
+                            th:value="${i}" th:text="${i}"></option>
+                </select>
+            </label><br/>
+            <label>Коментар:<br/>
+                <textarea name="comment" rows="3"></textarea>
+            </label><br/>
+            <button type="submit">Відправити</button>
+        </form>
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        <p><a th:href="@{/login}">Увійдіть</a>, щоб залишити відгук.</p>
+    </div>
+</section>
+
 
 <div style="text-align: center; margin-top: 20px;">
     <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary">Редагувати</a>

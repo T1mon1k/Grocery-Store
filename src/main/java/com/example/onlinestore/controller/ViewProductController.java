@@ -7,6 +7,7 @@ import com.example.onlinestore.entity.Category;
 import com.example.onlinestore.entity.Product;
 import com.example.onlinestore.service.CategoryService;
 import com.example.onlinestore.service.ProductService;
+import com.example.onlinestore.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +23,13 @@ public class ViewProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final ReviewService reviewService;
 
     @Autowired
-    public ViewProductController(ProductService productService,
-                                 CategoryService categoryService) {
+    public ViewProductController(ProductService productService, CategoryService categoryService, ReviewService reviewService) {
         this.productService = productService;
         this.categoryService = categoryService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping
@@ -100,9 +102,13 @@ public class ViewProductController {
 
     @GetMapping("/{id}")
     public String viewProduct(@PathVariable Long id, Model model) {
-        Product p = productService.getProductById(id)
-                .orElseThrow(() -> new RuntimeException("Продукт не знайдено"));
-        model.addAttribute("product", p);
+        Product product = productService.getProductById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Товар не знайдено: " + id));
+        model.addAttribute("product", product);
+
+        model.addAttribute("reviews", reviewService.getReviewsForProduct(id));
+        model.addAttribute("averageRating", reviewService.getAverageRating(id));
+
         return "product_detail";
     }
 
@@ -119,4 +125,6 @@ public class ViewProductController {
         productService.deleteById(id);
         return "redirect:/products";
     }
+
+
 }
