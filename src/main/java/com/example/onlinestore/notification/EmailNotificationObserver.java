@@ -22,11 +22,42 @@ public class EmailNotificationObserver implements OrderObserver {
     public void onStatusChanged(Order order, OrderStatus oldStatus, OrderStatus newStatus) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(order.getUser().getEmail());
-        msg.setSubject("Замовлення №" + order.getId() + " — статус: " + newStatus);
-        msg.setText(
-                "Ваше замовлення #" + order.getId() + " змінило статус:\n"
-                        + (oldStatus != null ? oldStatus : "—") + " → " + newStatus
-        );
+
+        // Тема з емоджі
+        msg.setSubject("🔔 Замовлення №" + order.getId() + " — " + newStatus.getDisplayName());
+
+        // Будуємо тіло листа
+        StringBuilder text = new StringBuilder();
+        text.append("👋 Доброго дня, ")
+                .append(order.getUser().getUsername())
+                .append("!\n\n");
+
+        text.append("Ваше замовлення №")
+                .append(order.getId())
+                .append(" щойно оновило статус:\n\n");
+
+        text.append("───────────────\n")
+                .append("🔄 СТАРИЙ СТАТУС ЗАМОВЛЕННЯ: ")
+                .append(oldStatus != null ? oldStatus.getDisplayName() : "—")
+                .append("\n")
+                .append("✅ НОВИЙ СТАТУС ЗАМОВЛЕННЯ: ")
+                .append(newStatus.getDisplayName())
+                .append("\n")
+                .append("───────────────\n\n");
+
+        text.append("📦 Загальна сума: ")
+                .append(order.getTotalPrice())
+                .append(" ₴\n");
+        text.append("📅 Дата: ")
+                .append(order.getCreatedAt().truncatedTo(java.time.temporal.ChronoUnit.MINUTES)
+                        .toString().replace("T"," "))
+                .append("\n\n");
+
+        text.append("<p>Якщо у вас є питання — відповідайте на цей лист.</p>");
+        text.append("Дякуємо, що обираєте FoodMarket! ❤️\n");
+
+        msg.setText(text.toString());
         mailSender.send(msg);
     }
+
 }

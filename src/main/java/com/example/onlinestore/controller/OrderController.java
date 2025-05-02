@@ -4,6 +4,7 @@ import com.example.onlinestore.service.CartService;
 import com.example.onlinestore.service.OrderService;
 import com.example.onlinestore.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -77,5 +78,17 @@ public class OrderController {
             return "order_details";
         }
         return "redirect:/orders/user_orders";
+    }
+
+    @PostMapping("/{orderId}/status")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('USER') "
+            + "and (#status == 'PAID' or #status == 'CANCELLED'))")
+    public String updateStatus(
+            @PathVariable Long orderId,
+            @RequestParam("status") String status) {
+
+        orderService.updateOrderStatus(orderId, status);
+        // Після зміни вертаємося на сторінку деталей
+        return "redirect:/orders/" + orderId;
     }
 }

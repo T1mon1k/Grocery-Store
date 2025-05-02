@@ -39,7 +39,7 @@
         <td th:text="${order.paymentMethod}"></td>
         <td th:text="${order.totalPrice}"></td>
         <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
-        <td th:text="${order.status}"></td>
+        <td th:text="${order.status.displayName}"></td>
         <td><a th:href="@{'/orders/' + ${order.id}}">Деталі</a></td>
 
     </tr>

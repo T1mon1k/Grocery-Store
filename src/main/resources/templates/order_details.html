@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Деталі замовлення</title>
@@ -19,7 +21,7 @@
     <p><strong>Спосіб доставки:</strong> <span th:text="${order.deliveryMethod}"></span></p>
     <p><strong>Спосіб оплати:</strong> <span th:text="${order.paymentMethod}"></span></p>
     <p><strong>Дата:</strong> <span th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
-    <p><strong>Статус:</strong> <span th:text="${order.status}"></span></p>
+    <p><strong>Статус:</strong> <span th:text="${order.status.displayName}"></span></p>
 
     <h3>Товари</h3>
     <table>
@@ -46,6 +48,34 @@
         </tr>
         </tfoot>
     </table>
+
+    <div th:if="${order.status.name() != 'CANCELLED'}"
+         sec:authorize="hasRole('USER')">
+        <h4>Оновити статус замовлення</h4>
+        <form th:action="@{/orders/{orderId}/status(orderId=${order.id})}"
+              method="post">
+            <select name="status">
+                <option value="PAID">Сплачено</option>
+                <option value="CANCELLED">Скасовано</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Оновити</button>
+        </form>
+    </div>
+
+    <div th:if="${order.status.name() != 'CANCELLED'}"
+         sec:authorize="hasRole('ADMIN')">
+        <h4>Адмін: призначити будь-який статус</h4>
+        <form th:action="@{/orders/{orderId}/status(orderId=${order.id})}"
+              method="post">
+            <select name="status">
+                <option th:each="s : ${T(com.example.onlinestore.entity.OrderStatus).values().?[name()!='CREATED']}"
+                        th:value="${s.name()}"
+                        th:text="${s.displayName}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary">Оновити</button>
+        </form>
+    </div>
 
     <a href="/orders/user_orders">← Назад до моїх замовлень</a>
 </div>

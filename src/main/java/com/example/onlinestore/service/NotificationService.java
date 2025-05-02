@@ -32,10 +32,14 @@ public class NotificationService {
             // будуємо HTML тіло
             StringBuilder html = new StringBuilder();
             html.append("<html><body>")
+                    .append("👋 Доброго дня, ")
+                    .append(order.getUser().getUsername())
+                    .append("!\n\n")
+
                     .append("<h2>Дякуємо за ваше замовлення №")
                     .append(order.getId())
                     .append("</h2>")
-                    .append("<p>Дата та час замовлення: ")
+                    .append("<p>📅 Дата та час замовлення: ")
                     .append(
                             order.getCreatedAt()
                                     .format(
@@ -72,7 +76,7 @@ public class NotificationService {
             }
 
             html.append("<tr>")
-                    .append("<td colspan='3' style='border:1px solid #ddd; padding:8px; text-align:right; font-weight:bold;'>Загалом:</td>")
+                    .append("<td colspan='3' style='border:1px solid #ddd; padding:8px; text-align:right; font-weight:bold;'>📦 Загалом:</td>")
                     .append("<td style='border:1px solid #ddd; padding:8px; text-align:right; font-weight:bold;'>")
                     .append(order.getTotalPrice()).append(" ₴")
                     .append("</td>")
@@ -87,12 +91,12 @@ public class NotificationService {
                     .append("</p>")
 
                     .append("<p>Статус замовлення: <b>")
-                    .append(order.getStatus())
+                    .append(order.getStatus().getDisplayName())
                     .append("</b></p>")
 
                     .append("<hr>")
                     .append("<p>Якщо у вас є питання — відповідайте на цей лист.</p>")
-                    .append("<p>З повагою, команда FoodMarket</p>")
+                    .append("<p>Дякуємо, що обираєте FoodMarket! ❤️</p>")
                     .append("</body></html>");
 
             helper.setText(html.toString(), true);

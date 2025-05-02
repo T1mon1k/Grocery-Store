@@ -95,10 +95,16 @@ public class OrderService {
 
     public void updateOrderStatus(Long orderId, String status) {
         Order order = getOrderById(orderId);
-        if (order != null) {
-            order.setStatus(OrderStatus.valueOf(status));;
-            orderRepository.save(order);
+        if (order == null) {
+            throw new RuntimeException("Замовлення не знайдено: " + orderId);
         }
+        OrderStatus oldStatus = order.getStatus();
+        OrderStatus newStatus = OrderStatus.valueOf(status);
+        order.setStatus(newStatus);
+        orderRepository.save(order);
+        observers.forEach(obs ->
+                obs.onStatusChanged(order, oldStatus, newStatus)
+        );
     }
 
     public List<Order> getOrdersByUsername(String username) {
@@ -113,7 +119,7 @@ public class OrderService {
 
     public void createOrderFromCart(String username) {
         var user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown user " + username));
+                .orElseThrow(() -> new IllegalArgumentException("Невідомий користувач " + username));
 
         List<CartItem> items = cartItemRepository.findByCartUser(user);
         if (items.isEmpty()) {
