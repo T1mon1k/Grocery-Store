@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Увійти — FoodMarket</title>
+
+    <!-- загальні стилі шапки/футера/кнопок/типографіки -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+    <!-- стилі форми логіну (контейнер, поля, кнопка тощо) -->
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+
+<!-- вставляємо шапку -->
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<!-- власне форма логіну -->
+<div class="login-container">
+    <h2>Увійти в акаунт</h2>
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label>Логін:</label>
+            <input name="username" required />
+        </div>
+        <div class="form-group">
+            <label>Пароль:</label>
+            <input name="password" type="password" required />
+        </div>
+        <button type="submit" class="btn">Увійти</button>
+
+        <p th:if="${param.error}" class="error">Невірний логін або пароль.</p>
+        <p th:if="${param.logout}" class="info">Ви вийшли з системи.</p>
+        <p class="register-link">
+            Ще немає акаунту? <a th:href="@{/register}">Зареєструватися</a>
+        </p>
+    </form>
+</div>
+
+</body>
+</html>

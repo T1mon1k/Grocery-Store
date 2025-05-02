@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформлення замовлення</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<div class="order-container">
+    <h2>Оформлення замовлення</h2>
+
+    <form th:action="@{/orders/submit}" method="post">
+        <label for="name">Ім’я:</label>
+        <input type="text" name="name" id="name" required>
+
+        <label for="phone">Телефон:</label>
+        <input type="tel" name="phone" id="phone" required>
+
+        <label for="address">Адреса доставки:</label>
+        <input type="text" name="address" id="address" required>
+
+        <label for="deliveryMethod">Спосіб доставки:</label>
+        <select name="deliveryMethod" id="deliveryMethod" required>
+            <option value="Кур’єр">Кур’єр</option>
+            <option value="Самовивіз">Самовивіз</option>
+            <option value="Пошта">Пошта</option>
+        </select>
+
+        <label for="paymentMethod">Спосіб оплати:</label>
+        <select name="paymentMethod" id="paymentMethod" required>
+            <option value="Онлайн">Онлайн</option>
+            <option value="Готівкою">Готівкою при отриманні</option>
+        </select>
+
+        <label for="comment">Коментар:</label>
+        <textarea name="comment" id="comment"></textarea>
+
+        <div class="form-actions">
+            <a href="/cart" class="back-link">← Назад до кошика</a>
+            <button type="submit" class="btn-primary">Підтвердити замовлення</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

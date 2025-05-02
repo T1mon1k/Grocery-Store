@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Кошик</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<main class="container">
+    <h1>Ваш кошик</h1>
+
+    <!-- Тепер без th:action — дія обирається кнопкою -->
+    <form method="post" class="cart-container">
+        <!-- CSRF прибрано, бо у вас .csrf().disable() -->
+
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Кількість</th>
+                <th>Ціна, ₴</th>
+                <th>Сума, ₴</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.product.name}">Назва товару</td>
+                <td>
+                    <input
+                            type="number"
+                            th:attr="name=${'quantity_' + item.product.id}"
+                            th:value="${item.quantity}"
+                            min="1"
+                            style="width: 60px; padding: 4px;"
+                            onchange="updateRowSum(this)" />
+                </td>
+                <td><span th:text="${item.product.price}">0</span></td>
+                <td><span class="row-sum" th:text="${item.totalPrice}">0</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="cart-footer" style="margin-top: 1em;">
+            <!-- Оформити замовлення: спочатку POST → /cart/update, потім /orders/new -->
+            <button type="submit"
+                    th:formaction="@{/cart/checkout}"
+                    class="btn btn-success">
+                Оформити замовлення
+            </button>
+
+            <a href="/products" class="btn btn-secondary">← Назад до каталогу</a>
+        </div>
+    </form>
+</main>
+
+<script>
+    function updateRowSum(input) {
+        const qty = parseInt(input.value) || 0;
+        const row = input.closest('tr');
+        const price = parseFloat(row.querySelector('td:nth-child(3) span').textContent) || 0;
+        row.querySelector('.row-sum').textContent = (price * qty).toFixed(2);
+    }
+</script>
+
+</body>
+</html>

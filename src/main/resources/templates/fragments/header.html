@@ -1,0 +1,32 @@
+<nav th:fragment="siteHeader"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     class="navbar">
+    <div class="logo">
+        <a th:href="@{/}">FoodMarket</a>
+    </div>
+
+    <ul class="menu">
+        <li><a th:href="@{/}">Головна</a></li>
+        <li><a th:href="@{/products}">Каталог</a></li>
+        <li><a th:href="@{/orders/user_orders}">Мої замовлення</a></li>
+        <!-- видно тільки адміну -->
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin}">Панель керування</a>
+        </li>
+        <li>
+            <a th:href="@{/cart}">🛒 Кошик</a>
+        </li>
+    </ul>
+
+
+    <div class="spacer"></div>
+    <div class="auth-links" sec:authorize="isAnonymous()">
+        <a th:href="@{/login}" class="btn-small">Вхід</a>
+        <a th:href="@{/register}" class="btn-small">Реєстрація</a>
+    </div>
+    <div class="user-info" sec:authorize="isAuthenticated()">
+        <span>Привіт, <strong sec:authentication="name"></strong>!</span>
+        <a th:href="@{/logout}" class="btn-small">Вийти</a>
+    </div>
+</nav>

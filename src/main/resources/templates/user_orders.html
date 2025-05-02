@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Мої замовлення</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<h2>Мої замовлення</h2>
+
+<div th:if="${orders.isEmpty()}">
+    <p>У вас ще немає замовлень.</p>
+</div>
+
+<table th:if="${!orders.isEmpty()}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Ім’я</th>
+        <th>Телефон</th>
+        <th>Адреса</th>
+        <th>Доставка</th>
+        <th>Оплата</th>
+        <th>Сума</th>
+        <th>Дата</th>
+        <th>Статус</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.customerName}"></td>
+        <td th:text="${order.phone}"></td>
+        <td th:text="${order.shippingAddress}"></td>
+        <td th:text="${order.deliveryMethod}"></td>
+        <td th:text="${order.paymentMethod}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${order.status}"></td>
+        <td><a th:href="@{'/orders/' + ${order.id}}">Деталі</a></td>
+
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

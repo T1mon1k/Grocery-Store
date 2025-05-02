@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Реєстрація — FoodMarket</title>
+
+    <!-- Загальні стилі (шапка, кнопки тощо) -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <!-- Специфічні стилі для форми -->
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+
+<!-- Фрагмент шапки -->
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<!-- Контейнер самої форми -->
+<div class="login-container">
+    <h2>Реєстрація</h2>
+
+    <form th:action="@{/register}" th:object="${userDto}" method="post">
+        <div class="form-group">
+            <label for="username">Логін:</label>
+            <input id="username" th:field="*{username}" placeholder="Ваш логін" required/>
+            <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input id="email" th:field="*{email}" placeholder="example@site.com" required/>
+            <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input id="password" type="password" th:field="*{password}" placeholder="мінімум 6 символів" required/>
+            <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Підтвердження паролю:</label>
+            <input id="confirmPassword" type="password" th:field="*{confirmPassword}" placeholder="Введіть пароль ще раз" required/>
+            <div class="error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
+        </div>
+
+        <div th:if="${error}" class="error">
+            <p th:text="${error}"></p>
+        </div>
+
+        <button type="submit" class="btn">Зареєструватися</button>
+    </form>
+
+    <p class="register-link">
+        Вже зареєстровані? <a th:href="@{/login}">Увійти</a>
+    </p>
+</div>
+
+</body>
+</html>

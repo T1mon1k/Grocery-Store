@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}">Назва товару</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${product.name}">Назва товару</h1>
+
+    <div class="product-detail">
+        <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" class="product-image"/>
+
+        <div class="product-info">
+            <p><strong>Бренд:</strong> <span th:text="${product.brand}">Бренд</span></p>
+            <p><strong>Категорія:</strong> <span th:text="${product.category.name}">Категорія</span></p>
+            <p><strong>Ціна:</strong> <span th:text="${#numbers.formatDecimal(product.price, 1, 2)} + ' ₴'">0.00 ₴</span></p>
+            <p><strong>Вага:</strong> <span th:text="${product.weight} + ' г'">0 г</span></p>
+        </div>
+    </div>
+
+    <form th:action="@{'/cart/' + ${cartId} + '/add'}" method="post" class="add-to-cart-form">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <label for="quantity">Кількість:</label>
+        <input type="number" name="quantity" min="1" value="1" required/>
+        <button type="submit" class="btn btn-primary">Додати до кошика</button>
+    </form>
+
+
+    <a href="/products" class="btn btn-secondary">← Назад до каталогу</a>
+</div>
+</body>
+</html>

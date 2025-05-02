@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Інтернет-магазин продуктів харчування</title>
+    <!-- Підключення зовнішнього CSS -->
+    <link rel="stylesheet" href="/css/style.css" />
+
+</head>
+<body>
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<!-- Герой-секція -->
+<section class="hero">
+    <h1>Свіжі продукти кожного дня</h1>
+    <p>Замовте свіжі овочі, фрукти, м'ясо та інші продукти безпосередньо від виробника.</p>
+    <button class="btn" onclick="window.location.href='/products'">Переглянути товари</button>
+</section>
+
+<!-- Секція категорій -->
+<section class="categories">
+    <h2>Популярні категорії</h2>
+    <div class="category-container">
+        <div class="category-item">
+            <img src="https://via.placeholder.com/280x150?text=Овочі" alt="Овочі">
+            <h3>Овочі</h3>
+            <p>Свіжі та натуральні</p>
+        </div>
+        <div class="category-item">
+            <img src="https://via.placeholder.com/280x150?text=Фрукти" alt="Фрукти">
+            <h3>Фрукти</h3>
+            <p>Солодкі та соковиті</p>
+        </div>
+        <div class="category-item">
+            <img src="https://via.placeholder.com/280x150?text=М'ясо" alt="М'ясо">
+            <h3>М'ясо</h3>
+            <p>Відбірне м'ясо</p>
+        </div>
+        <div class="category-item">
+            <img src="https://via.placeholder.com/280x150?text=Молочні+продукти" alt="Молочні продукти">
+            <h3>Молочні продукти</h3>
+            <p>Натуральні та корисні</p>
+        </div>
+    </div>
+</section>
+
+<!-- Секція товарів (приклад) -->
+<section class="products">
+    <h2>Новинки та акції</h2>
+    <div class="product-container">
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x200?text=Продукт+1" alt="Продукт 1">
+            <div class="card-content">
+                <h3>Свіжі яблука</h3>
+                <p>Найкращий вибір для здорового сніданку.</p>
+                <div class="price">$1.99 / кг</div>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x200?text=Продукт+2" alt="Продукт 2">
+            <div class="card-content">
+                <h3>Батон свіжого хліба</h3>
+                <p>Домашній хліб, запечений за традиційним рецептом.</p>
+                <div class="price">$0.99</div>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x200?text=Продукт+3" alt="Продукт 3">
+            <div class="card-content">
+                <h3>Сир «Чеддер»</h3>
+                <p>Насичений смак та чудова текстура.</p>
+                <div class="price">$3.49</div>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x200?text=Продукт+4" alt="Продукт 4">
+            <div class="card-content">
+                <h3>Органічні помідори</h3>
+                <p>Яскраві, соковиті та повні смаку.</p>
+                <div class="price">$2.99 / кг</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer>
+    <p>&copy; 2025 FoodMarket. Всі права захищено.</p>
+</footer>
+
+<!-- Підключення зовнішнього JavaScript -->
+<script src="script.js"></script>
+</body>
+</html>

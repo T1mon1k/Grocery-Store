@@ -1,0 +1,90 @@
+<!-- src/main/resources/templates/admin.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Панель керування — FoodMarket</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<section class="admin-panel">
+    <h2>Керування користувачами</h2>
+    <table class="user-table">
+        <thead>
+        <tr>
+            <th>Логін</th>
+            <th>Email</th>
+            <th>Роль</th>
+            <th>Дія</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.username}">username</td>
+            <td th:text="${u.email}">email</td>
+            <td th:text="${u.role}">ROLE_USER</td>
+            <td>
+                <!-- якщо це головний admin — нічого не показуємо -->
+                <div th:if="${u.username == 'admin'}">
+                    <em>Головний адміністратор</em>
+                </div>
+
+                <!-- для всіх інших дозволяємо змінювати -->
+                <form th:if="${u.username != 'admin'}"
+                      th:action="@{/admin/role}"
+                      method="post"
+                      style="display:inline">
+                    <input type="hidden" name="userId" th:value="${u.id}"/>
+                    <select name="role">
+                        <option th:each="r : ${roles}"
+                                th:value="${r}"
+                                th:text="${r}"
+                                th:selected="${r} == ${u.role}"></option>
+                    </select>
+                    <button type="submit" class="btn-small">Змінити</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Всі замовлення</h2>
+    <table class="order-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ім’я</th>
+            <th>Телефон</th>
+            <th>Адреса</th>
+            <th>Сума</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Деталі</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.customerName}"></td>
+            <td th:text="${order.phone}"></td>
+            <td th:text="${order.shippingAddress}"></td>
+            <td th:text="${order.totalPrice}"></td>
+            <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${order.status}"></td>
+            <td>
+                <a th:href="@{'/orders/' + ${order.id}}" class="btn-small">Переглянути</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</section>
+
+</body>
+</html>

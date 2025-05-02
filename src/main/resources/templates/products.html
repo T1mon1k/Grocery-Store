@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Каталог – FoodMarket</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<!-- Шапка каталогу: фільтри + дії -->
+<div class="catalog-header">
+    <div class="action-group" sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/products/new}" class="btn btn-primary">Додати товар</a>
+        <form th:action="@{/products/categories}" th:object="${newCategory}" method="post" class="cat-add-form">
+            <input type="text" th:field="*{name}" placeholder="Нова категорія" required/>
+            <button type="submit" class="btn btn-outline">Додати</button>
+        </form>
+        <form th:action="@{/products/categories/delete}" method="post" class="cat-delete-form">
+            <select name="categoryId" class="cat-delete-select" required>
+                <option value="" disabled selected>Видалити…</option>
+                <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+            </select>
+            <button type="submit" class="btn btn-outline danger">Видалити</button>
+        </form>
+    </div>
+
+    <form th:action="@{/products}" method="get" class="search-form">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Пошук по назві..." />
+        <select name="categoryId">
+            <option value="" th:selected="${selectedCategoryId == null}">Усі категорії</option>
+            <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id == selectedCategoryId}"></option>
+        </select>
+        <input type="text" name="brand" th:value="${brand}" placeholder="Виробник..." />
+        <input type="number" step="0.01" name="minWeight" th:value="${minWeight}" placeholder="Мін. вага" />
+        <input type="number" step="0.01" name="maxWeight" th:value="${maxWeight}" placeholder="Макс. вага" />
+        <select name="sort">
+            <option value="">Без сортування</option>
+            <option value="price_asc" th:selected="${sort == 'price_asc'}">Ціна ↑</option>
+            <option value="price_desc" th:selected="${sort == 'price_desc'}">Ціна ↓</option>
+            <option value="weight_asc" th:selected="${sort == 'weight_asc'}">Вага ↑</option>
+            <option value="weight_desc" th:selected="${sort == 'weight_desc'}">Вага ↓</option>
+            <option value="category_asc" th:selected="${sort == 'category_asc'}">Категорія ↑</option>
+            <option value="category_desc" th:selected="${sort == 'category_desc'}">Категорія ↓</option>
+            <option value="brand_asc" th:selected="${sort == 'brand_asc'}">Виробник ↑</option>
+            <option value="brand_desc" th:selected="${sort == 'brand_desc'}">Виробник ↓</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Фільтрувати</button>
+        <a th:href="@{/products}" class="btn btn-outline">Скинути</a>
+    </form>
+</div>
+
+<!-- Основна секція -->
+<section class="products">
+
+    <!-- Якщо пошук -->
+    <div th:if="${products != null}">
+        <h2 class="section-title">Результати пошуку</h2>
+        <p th:if="${#lists.isEmpty(products)}" class="empty">Нічого не знайдено…</p>
+        <div class="product-container" th:if="${!#lists.isEmpty(products)}">
+            <div class="product-card" th:each="p : ${products}">
+                <a th:href="@{/products/{id}(id=${p.id})}">
+                    <img th:src="@{${p.imageUrl}}" th:alt="${p.name}"/>
+                    <h3 th:text="${p.name}">Назва</h3>
+                </a>
+                <div class="price" th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' ₴'">0.00 ₴</div>
+
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="productId" th:value="${p.id}" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn btn-small btn-primary">Додати до кошика</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Якщо не пошук: вивід по категоріях -->
+    <div th:if="${products == null}" th:each="entry : ${productsByCategory}">
+        <h2 class="category-title" th:text="${entry.key.name}">Категорія</h2>
+        <div class="product-container" th:if="${!#lists.isEmpty(entry.value)}">
+            <div class="product-card" th:each="p : ${entry.value}">
+                <a th:href="@{/products/{id}(id=${p.id})}">
+                    <img th:src="@{${p.imageUrl}}" th:alt="${p.name}"/>
+                    <h3 th:text="${p.name}">Назва</h3>
+                </a>
+                <div class="price" th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' ₴'">0.00 ₴</div>
+
+                <form th:action="@{/cart/add}" method="post">
+                    <input type="hidden" name="productId" th:value="${p.id}" />
+                    <button type="submit" class="btn btn-small btn-primary">Додати до кошика</button>
+                </form>
+
+            </div>
+        </div>
+        <p th:if="${#lists.isEmpty(entry.value)}" class="empty">У цій категорії товарів немає.</p>
+    </div>
+</section>
+
+<script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="${product.name} + ' — FoodMarket'">Деталі товару</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<section class="product-detail">
+    <div class="container detail-container">
+        <a th:href="@{/products}" class="btn-link">← Назад до каталогу</a>
+        <h1 th:text="${product.name}">Назва товару</h1>
+
+        <div class="detail-main">
+            <div class="detail-image">
+                <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" />
+            </div>
+            <div class="detail-info">
+                <p><strong>Опис:</strong> <span th:text="${product.description}"></span></p>
+                <p><strong>Ціна:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price,1,2)} + ' ₴'"></span></p>
+                <p><strong>Вага:</strong> <span th:text="${product.weight} + ' кг'"></span></p>
+                <p><strong>Країна виробництва:</strong> <span th:text="${product.originCountry}"></span></p>
+                <p><strong>Склад:</strong> <span th:text="${product.composition}"></span></p>
+                <p><strong>Наявність:</strong> <span th:text="${product.stock} + ' шт.'"></span></p>
+                <p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
+                <p><strong>Додано:</strong> <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+                <p><strong>Середня оцінка:</strong> <span th:text="${product.averageRating}"></span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div style="text-align: center; margin-top: 20px;">
+    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary">Редагувати</a>
+
+    <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+        <input type="hidden" name="_method" value="delete"/>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Ви впевнені, що хочете видалити товар?');">
+            Видалити
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

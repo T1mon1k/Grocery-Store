@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Деталі замовлення</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: siteHeader"></div>
+
+<div class="container">
+    <h2>Замовлення №<span th:text="${order.id}"></span></h2>
+
+    <h3>Контактні дані</h3>
+    <p><strong>Ім’я:</strong> <span th:text="${order.customerName}"></span></p>
+    <p><strong>Телефон:</strong> <span th:text="${order.phone}"></span></p>
+    <p><strong>Адреса доставки:</strong> <span th:text="${order.shippingAddress}"></span></p>
+    <p><strong>Спосіб доставки:</strong> <span th:text="${order.deliveryMethod}"></span></p>
+    <p><strong>Спосіб оплати:</strong> <span th:text="${order.paymentMethod}"></span></p>
+    <p><strong>Дата:</strong> <span th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <p><strong>Статус:</strong> <span th:text="${order.status}"></span></p>
+
+    <h3>Товари</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Кількість</th>
+            <th>Ціна за одиницю</th>
+            <th>Сума</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.product.name}">Назва</td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="${item.unitPrice} + ' ₴'">0 ₴</td>
+            <td th:text="${item.unitPrice * item.quantity} + ' ₴'">0 ₴</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3"><strong>Загалом:</strong></td>
+            <td><strong th:text="${order.totalPrice} + ' ₴'">0 ₴</strong></td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <a href="/orders/user_orders">← Назад до моїх замовлень</a>
+</div>
+
+</body>
+</html>
