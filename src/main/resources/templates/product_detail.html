@@ -27,6 +27,7 @@
                 <p><strong>Склад:</strong> <span th:text="${product.composition}"></span></p>
                 <p><strong>Наявність:</strong> <span th:text="${product.stock} + ' шт.'"></span></p>
                 <p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
+                <p><strong>Бренд:</strong> <span th:text="${product.brand}"></span></p>
                 <p><strong>Додано:</strong> <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
                 <p><strong>Середня оцінка:</strong> <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)}"></span></p>
             </div>

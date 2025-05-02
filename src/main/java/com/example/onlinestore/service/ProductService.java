@@ -65,6 +65,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public void save(Product product) {
+        productRepository.save(product);
+    }
+
+
     public List<Product> getByCategory(Long categoryId) {
         if (categoryId == null) {
             return productRepository.findAll();

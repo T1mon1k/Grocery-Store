@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.math.BigDecimal;
+
 
 @Controller
 @RequestMapping("/products")
@@ -112,18 +114,40 @@ public class ViewProductController {
         return "product_detail";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editProduct(@PathVariable Long id, Model model) {
-        Product product = productService.getById(id);
-        model.addAttribute("product", product);
-        model.addAttribute("categories", categoryService.findAll());
-        return "product_form"; // сторінка з формою редагування
-    }
-
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);
         return "redirect:/products";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editProductForm(@PathVariable Long id, Model model) {
+        Product product = productService.getById(id); // або через репозиторій
+        model.addAttribute("product", product);
+        return "edit_product";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateProduct(@PathVariable Long id,
+                                @RequestParam String name,
+                                @RequestParam String description,
+                                @RequestParam BigDecimal price,
+                                @RequestParam Double weight,
+                                @RequestParam String originCountry,
+                                @RequestParam String composition,
+                                @RequestParam Integer stock,
+                                @RequestParam String brand) {
+        Product product = productService.getById(id);
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setWeight(weight);
+        product.setOriginCountry(originCountry);
+        product.setComposition(composition);
+        product.setStock(stock);
+        product.setBrand(brand);
+        productService.save(product);
+        return "redirect:/products/" + id;
     }
 
 

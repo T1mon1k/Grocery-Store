@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редагування товару</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Редагування товару</h2>
+
+    <form th:action="@{/products/edit/{id}(id=${product.id})}" method="post">
+        <input type="hidden" name="_method" value="put" />
+
+        <label>Назва:</label>
+        <input type="text" name="name" th:value="${product.name}" required><br/>
+
+        <label>Опис:</label>
+        <textarea name="description" rows="3" th:text="${product.description}"></textarea><br/>
+
+        <label>Ціна (₴):</label>
+        <input type="number" name="price" step="0.01" th:value="${product.price}" required><br/>
+
+        <label>Вага (кг):</label>
+        <input type="number" name="weight" step="0.01" th:value="${product.weight}"><br/>
+
+        <label>Країна:</label>
+        <input type="text" name="originCountry" th:value="${product.originCountry}"><br/>
+
+        <label>Склад:</label>
+        <input type="text" name="composition" th:value="${product.composition}"><br/>
+
+        <label>Кількість на складі:</label>
+        <input type="number" name="stock" th:value="${product.stock}" required><br/>
+
+        <label>Бренд:</label>
+        <input type="text" name="brand" th:value="${product.brand}"><br/>
+
+        <button type="submit">Зберегти</button>
+        <a th:href="@{/products/{id}(id=${product.id})}" class="btn-link">Скасувати</a>
+    </form>
+</div>
+</body>
+</html>
