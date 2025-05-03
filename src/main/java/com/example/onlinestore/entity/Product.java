@@ -74,7 +74,7 @@ public class Product {
     private Double averageRating = 0.0;
 
     private double rating;
-    
+
     public boolean isDeleted() { return deleted; }
 
     public double getRating() { return rating; }

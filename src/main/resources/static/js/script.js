@@ -1,13 +1,6 @@
-// script.js - простий приклад для можливих інтерактивних функцій
-
-// Функція для перемикання мобільного меню (якщо потрібно розширити логіку)
-function toggleMenu() {
-    const menu = document.querySelector('.navbar .menu');
-    menu.classList.toggle('active');
+function updateRowSum(input) {
+    const qty = parseInt(input.value) || 0;
+    const row = input.closest('tr');
+    const price = parseFloat(row.querySelector('td:nth-child(3) span').textContent) || 0;
+    row.querySelector('.row-sum').textContent = (price * qty).toFixed(2);
 }
-
-// Приклад: для кнопки перемикання меню (якщо ви додасте кнопку у HTML)
-// document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
-
-// Інші інтерактивні функції можна додавати тут.
-console.log("JavaScript завантажено та працює");
