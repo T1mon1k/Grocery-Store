@@ -44,14 +44,26 @@ public class ReviewService {
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("No product " + productId));
 
-        // Можна тут перевірити, чи вже був відгук від цього юзера для цього товару
-        // …
-
         Review r = new Review();
         r.setUser(user);
         r.setProduct(product);
         r.setRating(rating);
         r.setComment(comment);
         reviewRepo.save(r);
+        reviewRepo.save(r);
+        updateProductAverageRating(productId);
     }
+
+    public void updateProductAverageRating(Long productId) {
+        List<Review> reviews = reviewRepo.findByProductId(productId);
+        double avg = reviews.isEmpty() ? 0.0 :
+                reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
+
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Продукт не знайдено"));
+        product.setAverageRating(avg);
+        productRepo.save(product);
+    }
+
+
 }

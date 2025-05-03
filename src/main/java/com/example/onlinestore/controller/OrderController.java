@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.Map;
@@ -32,7 +33,6 @@ public class OrderController {
         return "order_form";
     }
 
-    // Обробимо сабміт із форми детальних даних замовлення (POST /orders/submit)
     @PostMapping("/submit")
     public String submitOrder(@RequestParam String name,
                               @RequestParam String phone,
@@ -40,25 +40,24 @@ public class OrderController {
                               @RequestParam String deliveryMethod,
                               @RequestParam String paymentMethod,
                               @RequestParam(required = false) String comment,
-                              Principal principal) {
+                              Principal principal,
+                              org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
 
-        orderService.createOrder(
-                principal.getName(),
-                name, phone, address,
-                deliveryMethod,
-                paymentMethod,
-                comment
-        );
-
-        return "redirect:/orders/user_orders";
+        try {
+            orderService.createOrder(
+                    principal.getName(),
+                    name, phone, address,
+                    deliveryMethod,
+                    paymentMethod,
+                    comment
+            );
+            return "redirect:/orders/user_orders";
+        } catch (RuntimeException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            return "redirect:/orders/new";
+        }
     }
 
-    @PostMapping("/new")
-    public String createOrderFromCart(@RequestParam Map<String, String> allQty, Principal principal) {
-        cartService.updateQuantities(allQty);
-        orderService.createOrderFromCart(principal.getName());
-        return "redirect:/orders/confirmation";
-    }
 
     @GetMapping("/user_orders")
     public String viewUserOrders(Model model, Principal principal) {
@@ -71,7 +70,6 @@ public class OrderController {
                                    Model model,
                                    Principal principal) {
         Order order = orderService.getOrderById(orderId);
-        // Перевірка доступу: або власник, або адмін
         if ("admin".equals(principal.getName()) ||
                 order.getUser().getUsername().equals(principal.getName())) {
             model.addAttribute("order", order);
@@ -86,9 +84,7 @@ public class OrderController {
     public String updateStatus(
             @PathVariable Long orderId,
             @RequestParam("status") String status) {
-
         orderService.updateOrderStatus(orderId, status);
-        // Після зміни вертаємося на сторінку деталей
         return "redirect:/orders/" + orderId;
     }
 }

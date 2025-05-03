@@ -32,6 +32,10 @@
       <input id="stock" type="number" th:field="*{stock}" required/>
     </div>
     <div class="form-group">
+      <label>Бренд:</label>
+      <input type="text" name="brand" th:value="${product.brand}"><br/>
+    </div>
+    <div class="form-group">
       <label for="category">Категорія:</label>
       <select id="category" name="categoryId">
         <option th:each="c : ${categories}"

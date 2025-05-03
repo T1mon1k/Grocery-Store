@@ -1,4 +1,3 @@
-// src/main/java/com/example/onlinestore/service/CategoryService.java
 package com.example.onlinestore.service;
 
 import com.example.onlinestore.entity.Category;
@@ -31,4 +30,9 @@ public class CategoryService {
     public void deleteById(Long id) {
         repo.deleteById(id);
     }
+
+    public Optional<Category> findByName(String name) {
+        return repo.findByName(name);
+    }
+
 }

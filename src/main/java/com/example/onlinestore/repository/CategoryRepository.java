@@ -3,6 +3,8 @@ package com.example.onlinestore.repository;
 import com.example.onlinestore.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    // За потреби можна додати методи пошуку
+    Optional<Category> findByName(String name);
 }

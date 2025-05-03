@@ -15,7 +15,7 @@
 
 <section class="admin-panel">
     <h2>Керування користувачами</h2>
-    <table class="user-table">
+    <table class="order-table">
         <thead>
         <tr>
             <th>Логін</th>
@@ -30,12 +30,9 @@
             <td th:text="${u.email}">email</td>
             <td th:text="${u.role}">ROLE_USER</td>
             <td>
-                <!-- якщо це головний admin — нічого не показуємо -->
                 <div th:if="${u.username == 'admin'}">
                     <em>Головний адміністратор</em>
                 </div>
-
-                <!-- для всіх інших дозволяємо змінювати -->
                 <form th:if="${u.username != 'admin'}"
                       th:action="@{/admin/role}"
                       method="post"
@@ -77,9 +74,7 @@
             <td th:text="${order.totalPrice}"></td>
             <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
             <td th:text="${order.status.displayName}"></td>
-            <td>
-                <a th:href="@{'/orders/' + ${order.id}}" class="btn-small">Переглянути</a>
-            </td>
+            <td><a th:href="@{'/orders/' + ${order.id}}" class="btn-small">Переглянути</a></td>
         </tr>
         </tbody>
     </table>

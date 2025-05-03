@@ -23,14 +23,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // публічні сторінки
-                        .requestMatchers("/", "/css/**", "/js/**", "/register", "/login", "/products").permitAll()
-                        // оновлення статусу для юзерів і адмінів
+                        .requestMatchers("/", "/images/**", "/css/**", "/js/**", "/register", "/login", "/products").permitAll()
                         .requestMatchers(HttpMethod.POST, "/orders/*/status")
                         .hasAnyRole("USER","ADMIN")
-                        // повна адмін-панель (якщо є)
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        // все інше – для залогінених
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -47,7 +43,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // BCryptPasswordEncoder імплементує org.springframework.security.crypto.password.PasswordEncoder
         return new BCryptPasswordEncoder();
     }
 
@@ -55,7 +50,6 @@ public class SecurityConfig {
     public DaoAuthenticationProvider authProvider(UserService userService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
-        // тут викликаємо метод, який приймає PasswordEncoder
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }

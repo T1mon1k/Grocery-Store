@@ -26,27 +26,19 @@ public class CartController {
         this.productService = productService;
     }
 
-    /**
-     * Перегляд кошика
-     */
     @GetMapping
     public String viewCart(Model model, Principal principal) {
         List<CartItem> items = cartService.getUserCartItems(principal.getName());
         model.addAttribute("items", items);
-        return "cart"; // templates/cart.html
+        return "cart";
     }
 
     @PostMapping("/checkout")
     public String checkout(@RequestParam Map<String, String> allParams) {
-        // 1) Оновлюємо всі кількості з форми
         cartService.updateQuantities(allParams);
-        // 2) Перенаправляємо на форму контактів
         return "redirect:/orders/new";
     }
 
-    /**
-     * Додати товар до кошика
-     */
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") int quantity,
@@ -55,9 +47,6 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    /**
-     * Очистити кошик поточного користувача
-     */
     @PostMapping("/clear")
     public String clearCart(Principal principal) {
         List<CartItem> items = cartService.getUserCartItems(principal.getName());
@@ -68,14 +57,18 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    /**
-     * Перегляд товару з можливістю додати його в кошик
-     */
     @GetMapping("/product/{id}")
     public String viewProduct(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id)
                 .orElseThrow(() -> new RuntimeException("Товар не знайдено"));
         model.addAttribute("product", product);
-        return "product_card"; // templates/product_card.html
+        return "product_card";
     }
+
+    @PostMapping("/delete")
+    public String deleteItem(@RequestParam("productId") Long productId, Principal principal) {
+        cartService.removeItemByProductId(productId, principal.getName());
+        return "redirect:/cart";
+    }
+
 }

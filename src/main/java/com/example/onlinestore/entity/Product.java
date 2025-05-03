@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import lombok.Getter;
 import org.hibernate.annotations.Formula;
 
 @Entity
-@Table(name = "products") // згідно з таблицею — products, не product
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -49,10 +51,12 @@ public class Product {
     @Column(name = "composition", length = 2000)
     private String composition;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        // формульне поле averageRating не потребує ініціалізації в PrePersist
     }
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
@@ -65,7 +69,15 @@ public class Product {
                     "where r.product_id = id" +
                     ")"
     )
-    private Double averageRating;
+
+    @Column(name = "average_rating")
+    private Double averageRating = 0.0;
+
+    private double rating;
+    
+    public boolean isDeleted() { return deleted; }
+
+    public double getRating() { return rating; }
 
     public Long getId() {
         return id;
@@ -115,9 +127,7 @@ public class Product {
         return category;
     }
 
-    public Double getAverageRating() {
-        return averageRating;
-    }
+    public Double getAverageRating() { return averageRating; }
 
     public void setId(Long id) {
         this.id = id;
@@ -167,7 +177,9 @@ public class Product {
         this.category = category;
     }
 
-    public void setAverageRating(Double averageRating) {
-        this.averageRating = averageRating;
-    }
+    public void setAverageRating(Double averageRating) { this.averageRating = averageRating; }
+
+    public void setRating(double rating) { this.rating = rating; }
+
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
 }

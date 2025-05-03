@@ -20,16 +20,16 @@
                 <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" />
             </div>
             <div class="detail-info">
-                <p><strong>Опис:</strong> <span th:text="${product.description}"></span></p>
                 <p><strong>Ціна:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price,1,2)} + ' ₴'"></span></p>
-                <p><strong>Вага:</strong> <span th:text="${product.weight} + ' кг'"></span></p>
+                <p><strong>Середня оцінка:</strong> <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)}"></span></p>
+                <p><strong>Наявність:</strong> <span th:text="${product.stock} + ' шт.'"></span></p>
+                <p><strong>Бренд:</strong> <span th:text="${product.brand}"></span></p>
+                <p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
+                <p><strong>Опис:</strong> <span th:text="${product.description}"></span></p>
                 <p><strong>Країна виробництва:</strong> <span th:text="${product.originCountry}"></span></p>
                 <p><strong>Склад:</strong> <span th:text="${product.composition}"></span></p>
-                <p><strong>Наявність:</strong> <span th:text="${product.stock} + ' шт.'"></span></p>
-                <p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
-                <p><strong>Бренд:</strong> <span th:text="${product.brand}"></span></p>
+                <p><strong>Вага:</strong> <span th:text="${product.weight} + ' кг'"></span></p>
                 <p><strong>Додано:</strong> <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
-                <p><strong>Середня оцінка:</strong> <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)}"></span></p>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 package com.example.onlinestore.controller;
 
+import com.example.onlinestore.repository.ProductRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,9 @@ public class ViewProductController {
     private final ReviewService reviewService;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     public ViewProductController(ProductService productService, CategoryService categoryService, ReviewService reviewService) {
         this.productService = productService;
         this.categoryService = categoryService;
@@ -42,6 +46,9 @@ public class ViewProductController {
             @RequestParam(required = false) Double minWeight,
             @RequestParam(required = false) Double maxWeight,
             @RequestParam(required = false) String sort,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String composition,
             Model model
     ) {
         List<Category> categories = categoryService.findAll();
@@ -52,22 +59,29 @@ public class ViewProductController {
         model.addAttribute("minWeight", minWeight);
         model.addAttribute("maxWeight", maxWeight);
         model.addAttribute("sort", sort);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("composition", composition);
         model.addAttribute("newCategory", new Category());
-
-        boolean isFiltering = keyword != null || categoryId != null || brand != null || minWeight != null || maxWeight != null || sort != null;
-
+        boolean isFiltering = keyword != null || categoryId != null || brand != null || minWeight != null ||
+                maxWeight != null || minPrice != null || maxPrice != null || composition != null || sort != null;
         if (isFiltering) {
-            List<Product> products = productService.search(keyword, categoryId, brand, minWeight, maxWeight, sort);
+            List<Product> products = productService.search(keyword, categoryId, brand, minWeight, maxWeight, minPrice, maxPrice, composition, sort);
             model.addAttribute("products", products);
         } else {
             Map<Category, List<Product>> productsByCategory = new LinkedHashMap<>();
             for (Category c : categories) {
-                productsByCategory.put(c, productService.getByCategory(c.getId()));
+                productsByCategory.put(c, productService.getByCategoryActive(c.getId()));
             }
             model.addAttribute("productsByCategory", productsByCategory);
         }
-
         return "products";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.softDeleteById(id);
+        return "redirect:/products";
     }
 
     @PostMapping("/categories")
@@ -76,9 +90,27 @@ public class ViewProductController {
         return "redirect:/products";
     }
 
+    private Category getOrCreateUncategorizedCategory() {
+        String uncategorizedName = "Без категорії";
+        return categoryService.findByName(uncategorizedName)
+                .orElseGet(() -> {
+                    Category newCategory = new Category();
+                    newCategory.setName(uncategorizedName);
+                    return categoryService.save(newCategory);
+                });
+    }
+
     @PostMapping("/categories/delete")
     @PreAuthorize("hasRole('ADMIN')")
     public String deleteCategory(@RequestParam("categoryId") Long categoryId) {
+        Category toDelete = categoryService.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Категорію не знайдено"));
+        Category uncategorized = getOrCreateUncategorizedCategory();
+        List<Product> products = productService.getByCategoryAll(categoryId);
+        for (Product product : products) {
+            product.setCategory(uncategorized);
+            productService.save(product);
+        }
         categoryService.deleteById(categoryId);
         return "redirect:/products";
     }
@@ -107,17 +139,9 @@ public class ViewProductController {
         Product product = productService.getProductById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Товар не знайдено: " + id));
         model.addAttribute("product", product);
-
         model.addAttribute("reviews", reviewService.getReviewsForProduct(id));
         model.addAttribute("averageRating", reviewService.getAverageRating(id));
-
         return "product_detail";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.deleteById(id);
-        return "redirect:/products";
     }
 
     @GetMapping("/edit/{id}")
@@ -149,6 +173,4 @@ public class ViewProductController {
         productService.save(product);
         return "redirect:/products/" + id;
     }
-
-
 }
