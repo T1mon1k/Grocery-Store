@@ -8,7 +8,8 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<div th:replace="fragments/header :: siteHeader"></div>
+
+<div th:replace="~{fragments/header :: siteHeader}"></div>
 
 <section class="product-detail">
     <div class="container detail-container">
@@ -20,17 +21,56 @@
                 <img th:src="@{${product.imageUrl}}" th:alt="${product.name}" />
             </div>
             <div class="detail-info">
-                <p><strong>Ціна:</strong> <span class="price" th:text="${#numbers.formatDecimal(product.price,1,2)} + ' ₴'"></span></p>
-                <p><strong>Середня оцінка:</strong> <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)}"></span></p>
-                <p><strong>Наявність:</strong> <span th:text="${product.stock} + ' шт.'"></span></p>
-                <p><strong>Бренд:</strong> <span th:text="${product.brand}"></span></p>
-                <p><strong>Категорія:</strong> <span th:text="${product.category.name}"></span></p>
-                <p><strong>Опис:</strong> <span th:text="${product.description}"></span></p>
-                <p><strong>Країна виробництва:</strong> <span th:text="${product.originCountry}"></span></p>
-                <p><strong>Склад:</strong> <span th:text="${product.composition}"></span></p>
-                <p><strong>Вага:</strong> <span th:text="${product.weight} + ' кг'"></span></p>
-                <p><strong>Додано:</strong> <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+                <p>
+                    <strong>Ціна:</strong>
+                    <span class="price"
+                          th:text="${#numbers.formatDecimal(product.price,1,2)} + ' ₴/' + ${product.priceUnit}">
+                    </span>
+                </p>
+
+                <p><strong>Середня оцінка:</strong>
+                    <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)}"></span>
+                </p>
+
+                <p>
+                    <strong>Наявність:</strong>
+                    <span th:text="${product.stock} + ' ' + ${product.getPriceUnit()}"></span>
+                </p>
+
+                <p th:if="${product.brand != null and !product.brand.isEmpty()}">
+                    <strong>Бренд:</strong> <span th:text="${product.brand}"></span>
+                </p>
+
+                <p><strong>Категорія:</strong>
+                    <span th:text="${product.category.name}"></span>
+                </p>
+
+                <p th:if="${product.description != null and !product.description.isEmpty()}">
+                    <strong>Опис:</strong> <span th:text="${product.description}"></span>
+                </p>
+
+                <p th:if="${product.originCountry != null and !product.originCountry.isEmpty()}">
+                    <strong>Країна виробництва:</strong> <span th:text="${product.originCountry}"></span>
+                </p>
+
+                <p th:if="${product.composition != null and !product.composition.isEmpty()}">
+                    <strong>Склад:</strong> <span th:text="${product.composition}"></span>
+                </p>
+
+                <p th:if="${product.weight != null}">
+                    <strong>Вага:</strong> <span th:text="${product.weight} + ' кг'"></span>
+                </p>
+
+                <p th:if="${product.volumeInLiters != null}">
+                    <strong>Обʼєм:</strong> <span th:text="${product.volumeInLiters} + ' л'"></span>
+                </p>
+
+                <p><strong>Додано:</strong>
+                    <span th:text="${#temporals.format(product.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+                </p>
             </div>
+
+
         </div>
     </div>
 </section>
@@ -48,7 +88,7 @@
             <small th:text="${#temporals.format(r.createdAt, 'dd.MM.yyyy HH:mm')}">
                 01.01.2025 12:00
             </small>
-            <p th:text="${r.comment}">Коментар</p>
+            <p class="review-comment" th:text="${r.comment}">Коментар</p>
         </li>
     </ul>
 

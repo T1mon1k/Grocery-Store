@@ -23,7 +23,7 @@
     <form th:action="@{'/cart/' + ${cartId} + '/add'}" method="post" class="add-to-cart-form">
         <input type="hidden" name="productId" th:value="${product.id}"/>
         <label for="quantity">Кількість:</label>
-        <input type="number" name="quantity" min="1" value="1" required/>
+        <input id="quantity" type="number" name="quantity" min="1" value="1" required/>
         <button type="submit" class="btn btn-primary">Додати до кошика</button>
     </form>
     <a href="/products" class="btn btn-secondary">← Назад до каталогу</a>

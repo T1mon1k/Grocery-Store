@@ -14,43 +14,56 @@
             <input type="hidden" name="_method" value="put" />
 
             <div class="form-group">
-                <label>Назва:</label>
-                <input type="text" name="name" th:value="${product.name}" required>
+                <label for="name">Назва:</label>
+                <input id="name" type="text" name="name" th:value="${product.name}" required>
             </div>
 
             <div class="form-group">
-                <label>Опис:</label>
-                <textarea name="description" rows="3" th:text="${product.description}"></textarea>
+                <label for="description">Опис:</label>
+                <textarea id="description" name="description" rows="3" th:text="${product.description}"></textarea>
             </div>
 
             <div class="form-group">
-                <label>Ціна (₴):</label>
-                <input type="number" name="price" step="0.01" th:value="${product.price}" required>
+                <label for="price">Ціна (₴):</label>
+                <input id="price" type="number" name="price" step="0.01" th:value="${product.price}" required>
             </div>
 
             <div class="form-group">
-                <label>Вага (кг):</label>
-                <input type="number" name="weight" step="0.01" th:value="${product.weight}">
+                <label for="priceType">Ціна за:</label>
+                <select id="priceType" name="priceType" required>
+                    <option value="PER_UNIT" th:selected="${product.priceType == 'PER_UNIT'}">за штуку</option>
+                    <option value="PER_KG" th:selected="${product.priceType == 'PER_KG'}">за кілограм</option>
+                </select>
             </div>
 
             <div class="form-group">
-                <label>Країна:</label>
-                <input type="text" name="originCountry" th:value="${product.originCountry}">
+                <label for="weight">Вага (кг):</label>
+                <input id="weight" type="number" name="weight" step="0.01" min="0" th:value="${product.weight}">
             </div>
 
             <div class="form-group">
-                <label>Склад:</label>
-                <input type="text" name="composition" th:value="${product.composition}">
+                <label for="volumeInLiters">Обʼєм (л):</label>
+                <input id="volumeInLiters" type="number" name="volumeInLiters" step="0.01" min="0" th:value="${product.volumeInLiters}">
             </div>
 
             <div class="form-group">
-                <label>Кількість на складі:</label>
-                <input type="number" name="stock" th:value="${product.stock}" required>
+                <label for="originCountry">Країна:</label>
+                <input id="originCountry" type="text" name="originCountry" th:value="${product.originCountry}">
             </div>
 
             <div class="form-group">
-                <label>Бренд:</label>
-                <input type="text" name="brand" th:value="${product.brand}">
+                <label for="composition">Склад:</label>
+                <input id="composition" type="text" name="composition" th:value="${product.composition}">
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Кількість на складі:</label>
+                <input id="stock" type="number" name="stock" min="0" th:value="${product.stock}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Бренд:</label>
+                <input id="brand" type="text" name="brand" th:value="${product.brand}">
             </div>
 
             <div class="form-buttons">
@@ -58,6 +71,7 @@
                 <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-outline">Скасувати</a>
             </div>
         </form>
+
     </div>
 </div>
 </body>

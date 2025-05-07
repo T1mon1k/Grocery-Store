@@ -6,7 +6,7 @@
   <link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<div th:replace="fragments/header :: siteHeader"></div>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
 
 <section class="product-form">
   <h2>Додати новий товар</h2>
@@ -17,18 +17,25 @@
     </div>
     <div class="form-group">
       <label for="description">Опис:</label>
-      <textarea id="description" th:field="*{description}" required></textarea>
+      <textarea id="description" th:field="*{description}"></textarea>
     </div>
     <div class="form-group">
       <label for="price">Ціна:</label>
       <input id="price" type="number" step="0.01" th:field="*{price}" required/>
     </div>
     <div class="form-group">
+      <label for="priceType">Ціна за:</label>
+      <select id="priceType" th:field="*{priceType}" required>
+        <option value="PER_UNIT" th:selected="${product.priceType == 'PER_UNIT'}">за штуку</option>
+        <option value="PER_KG" th:selected="${product.priceType == 'PER_KG'}">за кілограм</option>
+      </select>
+    </div>
+    <div class="form-group">
       <label for="imageUrl">URL зображення:</label>
       <input id="imageUrl" type="url" th:field="*{imageUrl}" required/>
     </div>
     <div class="form-group">
-      <label for="stock">Наявність (шт.):</label>
+      <label for="stock">Наявність:</label>
       <input id="stock" type="number" th:field="*{stock}" required/>
     </div>
     <div class="form-group">
@@ -46,6 +53,10 @@
     <div class="form-group">
       <label for="weight">Вага (кг):</label>
       <input id="weight" type="text" th:field="*{weight}" placeholder="0.5" />
+    </div>
+    <div class="form-group">
+      <label for="volumeInLiters">Об’єм (л):</label>
+      <input id="volumeInLiters" type="number" step="0.01" th:field="*{volumeInLiters}" placeholder="0.5" />
     </div>
     <div class="form-group">
       <label for="originCountry">Країна виробництва:</label>

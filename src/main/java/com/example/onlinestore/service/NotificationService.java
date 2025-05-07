@@ -37,7 +37,7 @@ public class NotificationService {
                     .append("</h2>")
                     .append("<p>📅 Дата та час замовлення: ")
                     .append(
-                            order.getCreatedAt()
+                            order.getOrderDate()
                                     .format(
                                             java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy 'о' HH:mm")
                                     )
@@ -50,7 +50,7 @@ public class NotificationService {
                     .append("<tr>")
                     .append("<th style='border:1px solid #ddd; padding:8px;'>Товар</th>")
                     .append("<th style='border:1px solid #ddd; padding:8px;'>Кількість</th>")
-                    .append("<th style='border:1px solid #ddd; padding:8px;'>Ціна за од.</th>")
+                    .append("<th style='border:1px solid #ddd; padding:8px;'>Ціна</th>")
                     .append("<th style='border:1px solid #ddd; padding:8px;'>Сума</th>")
                     .append("</tr>");
 

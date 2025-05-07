@@ -7,7 +7,8 @@
 </head>
 <body>
 
-<div th:replace="fragments/header :: siteHeader"></div>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
 <h2>Мої замовлення</h2>
 <div th:if="${orders.isEmpty()}">
     <p>У вас ще немає замовлень.</p>
@@ -36,7 +37,7 @@
         <td th:text="${order.deliveryMethod}"></td>
         <td th:text="${order.paymentMethod}"></td>
         <td th:text="${order.totalPrice}"></td>
-        <td th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></td>
         <td th:text="${order.status.displayName}"></td>
         <td><a th:href="@{'/orders/' + ${order.id}}" class="btn-small">Переглянути</a></td>
     </tr>

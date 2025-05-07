@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header :: siteHeader"></div>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
 
 <div class="container">
     <h2>Замовлення №<span th:text="${order.id}"></span></h2>
@@ -20,7 +20,7 @@
     <p><strong>Адреса доставки:</strong> <span th:text="${order.shippingAddress}"></span></p>
     <p><strong>Спосіб доставки:</strong> <span th:text="${order.deliveryMethod}"></span></p>
     <p><strong>Спосіб оплати:</strong> <span th:text="${order.paymentMethod}"></span></p>
-    <p><strong>Дата:</strong> <span th:text="${#temporals.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+    <p><strong>Дата:</strong> <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}"></span></p>
     <p><strong>Статус:</strong> <span th:text="${order.status.displayName}"></span></p>
 
     <h3>Товари</h3>
@@ -29,7 +29,7 @@
         <tr>
             <th>Назва</th>
             <th>Кількість</th>
-            <th>Ціна за одиницю</th>
+            <th>Ціна</th>
             <th>Сума</th>
         </tr>
         </thead>
@@ -64,7 +64,7 @@
 
     <div th:if="${order.status.name() != 'CANCELLED'}"
          sec:authorize="hasRole('ADMIN')">
-        <h4>Адмін: призначити будь-який статус</h4>
+        <h4>Оновити статус замовлення</h4>
         <form th:action="@{/orders/{orderId}/status(orderId=${order.id})}"
               method="post">
             <select name="status">

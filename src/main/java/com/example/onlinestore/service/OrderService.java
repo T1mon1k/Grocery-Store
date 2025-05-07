@@ -55,7 +55,7 @@ public class OrderService {
         order.setDeliveryMethod(deliveryMethod);
         order.setPaymentMethod(paymentMethod);
         order.setStatus(OrderStatus.CREATED);
-        order.setCreatedAt(LocalDateTime.now());
+        order.setOrderDate(LocalDateTime.now());
 
         for (CartItem ci : cart.getItems()) {
             Product product = ci.getProduct();

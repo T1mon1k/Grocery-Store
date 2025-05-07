@@ -45,6 +45,8 @@ public class Product {
     @Column(name = "weight")
     private Double weight;
 
+    private Double volumeInLiters;
+
     @Column(name = "origin_country")
     private String originCountry;
 
@@ -53,6 +55,13 @@ public class Product {
 
     @Column(nullable = false)
     private boolean deleted = false;
+
+    @Enumerated(EnumType.STRING)
+    private PriceType priceType;
+
+    public String getPriceUnit() {
+        return priceType == PriceType.PER_KG ? "кг" : "шт";
+    }
 
     @PrePersist
     protected void onCreate() {
@@ -73,11 +82,7 @@ public class Product {
     @Column(name = "average_rating")
     private Double averageRating = 0.0;
 
-    private double rating;
-
     public boolean isDeleted() { return deleted; }
-
-    public double getRating() { return rating; }
 
     public Long getId() {
         return id;
@@ -129,6 +134,11 @@ public class Product {
 
     public Double getAverageRating() { return averageRating; }
 
+    public PriceType getPriceType() { return priceType; }
+
+    public Double getVolumeInLiters() { return volumeInLiters; }
+
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -179,7 +189,9 @@ public class Product {
 
     public void setAverageRating(Double averageRating) { this.averageRating = averageRating; }
 
-    public void setRating(double rating) { this.rating = rating; }
-
     public void setDeleted(boolean deleted) { this.deleted = deleted; }
+
+    public void setPriceType(PriceType priceType) { this.priceType = priceType; }
+
+    public void setVolumeInLiters(Double volumeInLiters) { this.volumeInLiters = volumeInLiters; }
 }

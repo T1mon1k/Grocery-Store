@@ -45,9 +45,7 @@ public class Review {
         return product;
     }
 
-    public int getRating() {
-        return rating;
-    }
+    public int getRating() { return rating; }
 
     public String getComment() {
         return comment;
@@ -69,9 +67,7 @@ public class Review {
         this.product = product;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
+    public void setRating(int rating) { this.rating = rating; }
 
     public void setComment(String comment) {
         this.comment = comment;

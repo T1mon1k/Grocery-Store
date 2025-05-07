@@ -9,10 +9,9 @@
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
-<div th:replace="fragments/header :: siteHeader"></div>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
 
 <div class="catalog-header">
-    <!-- Ліва частина: Адмін-кнопки -->
     <div class="admin-actions" sec:authorize="hasRole('ADMIN')">
         <a th:href="@{/products/new}" class="btn btn-primary">Додати товар</a>
 
@@ -75,7 +74,9 @@
                     <img th:src="@{${p.imageUrl}}" th:alt="${p.name}"/>
                     <h3 th:text="${p.name}">Назва</h3>
                 </a>
-                <div class="price" th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' ₴'"></div>
+                <div class="price"
+                     th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' ₴/' + (p.priceType == 'PER_KG' ? 'кг' : 'шт')">
+                </div>
                 <div class="rating" th:if="${p.averageRating ne null}"
                      th:text="'★ ' + ${#numbers.formatDecimal(p.averageRating, 1, 1)} + ' / 5'">
                 </div>
@@ -98,7 +99,9 @@
                     <img th:src="@{${p.imageUrl}}" th:alt="${p.name}"/>
                     <h3 th:text="${p.name}">Назва</h3>
                 </a>
-                <div class="price" th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' ₴'"></div>
+                <div class="price"
+                     th:text="${#numbers.formatDecimal(p.price, 1, 2)} + ' ₴/' + ${p.getPriceUnit()}">
+                </div>
                 <div class="rating" th:if="${p.averageRating ne null}"
                      th:text="'★ ' + ${#numbers.formatDecimal(p.averageRating, 1, 1)} + ' / 5'">
                 </div>

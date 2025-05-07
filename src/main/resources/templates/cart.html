@@ -7,7 +7,8 @@
     <link rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 <body>
-<div th:replace="fragments/header :: siteHeader"></div>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
 <main class="container">
     <h1>Ваш кошик</h1>
     <form method="post" class="cart-container">
@@ -33,7 +34,9 @@
                             style="width: 60px; padding: 4px;"
                             onchange="updateRowSum(this)" />
                 </td>
-                <td><span th:text="${item.product.price}">0</span></td>
+                <td>
+                    <span th:text="${item.product.price} + ' ₴/' + ${item.product.getPriceUnit()}">0</span>
+                </td>
                 <td><span class="row-sum" th:text="${item.totalPrice}">0</span></td>
                 <td>
                     <button type="submit"

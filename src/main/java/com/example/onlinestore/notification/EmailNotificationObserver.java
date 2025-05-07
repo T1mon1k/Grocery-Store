@@ -46,7 +46,7 @@ public class EmailNotificationObserver implements OrderObserver {
                 .append(order.getTotalPrice())
                 .append(" ₴\n");
         text.append("📅 Дата: ")
-                .append(order.getCreatedAt().truncatedTo(java.time.temporal.ChronoUnit.MINUTES)
+                .append(order.getOrderDate().truncatedTo(java.time.temporal.ChronoUnit.MINUTES)
                         .toString().replace("T"," "))
                 .append("\n\n");
 

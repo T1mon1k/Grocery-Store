@@ -1671,3 +1671,8 @@ tr:hover {
     padding: 0 12px;
     font-size: 0.95rem;
 }
+
+.review-comment {
+    text-align: left;
+    margin-left: 0;
+}

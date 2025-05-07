@@ -36,10 +36,6 @@ public class Order {
     private String shippingAddress;
     private String deliveryMethod;
     private String paymentMethod;
-    private LocalDateTime createdAt;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus OrderStatus;
 
     public Order() {
         this.orderDate = LocalDateTime.now();
@@ -75,7 +71,4 @@ public class Order {
 
     public String getPaymentMethod() { return paymentMethod; }
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.example.onlinestore.entity.Category;
 import com.example.onlinestore.entity.Product;
+import com.example.onlinestore.entity.PriceType;
 import com.example.onlinestore.service.CategoryService;
 import com.example.onlinestore.service.ProductService;
 import com.example.onlinestore.service.ReviewService;
@@ -154,13 +155,15 @@ public class ViewProductController {
     @PostMapping("/edit/{id}")
     public String updateProduct(@PathVariable Long id,
                                 @RequestParam String name,
-                                @RequestParam String description,
+                                @RequestParam(required = false) String description,
                                 @RequestParam BigDecimal price,
-                                @RequestParam Double weight,
-                                @RequestParam String originCountry,
-                                @RequestParam String composition,
+                                @RequestParam(required = false) Double weight,
+                                @RequestParam(required = false) String originCountry,
+                                @RequestParam(required = false) String composition,
                                 @RequestParam Integer stock,
-                                @RequestParam String brand) {
+                                @RequestParam(required = false) String brand,
+                                @RequestParam PriceType priceType,
+                                @RequestParam(required = false) Double volumeInLiters) {
         Product product = productService.getById(id);
         product.setName(name);
         product.setDescription(description);
@@ -170,7 +173,10 @@ public class ViewProductController {
         product.setComposition(composition);
         product.setStock(stock);
         product.setBrand(brand);
+        product.setPriceType(priceType);
+        product.setVolumeInLiters(volumeInLiters);
         productService.save(product);
         return "redirect:/products/" + id;
     }
+
 }
