@@ -25,16 +25,9 @@ public class OrderService {
     @Autowired private NotificationService notificationService;
     @Autowired private ProductRepository productRepository;
 
-
-    /** Spring автоматично підставить усі біні, які реалізують OrderObserver */
     @Autowired
     private List<OrderObserver> observers;
 
-
-
-    /**
-     * Створює нове замовлення та кидає подію CREATED
-     */
     public Order createOrder(String username,
                              String customerName,
                              String phone,
@@ -71,36 +64,23 @@ public class OrderService {
                 throw new RuntimeException("Недостатньо товару: " + product.getName() +
                         ". Залишилось лише " + product.getStock());
             }
-
             product.setStock(newStock);
             productRepository.save(product);
-
             OrderItem oi = new OrderItem(product, ci.getQuantity(), ci.getProduct().getPrice());
             oi.setOrder(order);
             order.getItems().add(oi);
         }
-
-
-        // 3) Обчислюємо загальну ціну
         BigDecimal total = order.getItems().stream()
                 .map(oi -> oi.getUnitPrice().multiply(BigDecimal.valueOf(oi.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         order.setTotalPrice(total);
-
-        // 4) Зберігаємо замовлення
         Order saved = orderRepository.save(order);
-
-        // 5) Очищаємо кошик
         cart.getItems().clear();
         cartRepository.save(cart);
-
-        // 6) Сповіщаємо про замовлення
         notificationService.sendOrderConfirmation(saved);
 
         return saved;
     }
-
-
 
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElse(null);

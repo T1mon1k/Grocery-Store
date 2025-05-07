@@ -3,7 +3,7 @@ package com.example.onlinestore.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "categories") // 🔄 згідно зі специфікацією – у множині
+@Table(name = "categories")
 public class Category {
 
     @Id
@@ -13,14 +13,12 @@ public class Category {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-    // ======== Конструктори ========
     public Category() {}
 
     public Category(String name) {
         this.name = name;
     }
 
-    // ======== Геттери / Сеттери ========
     public Long getId() {
         return id;
     }

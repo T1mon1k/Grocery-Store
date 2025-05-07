@@ -16,7 +16,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";    // шукатиме src/main/resources/templates/login.html
+        return "login";
     }
 
     @GetMapping("/register")
@@ -31,23 +31,19 @@ public class AuthController {
             BindingResult br,
             Model m
     ) {
-        // 1) стандартні помилки валідації полів
         if (br.hasErrors()) {
             return "register";
         }
-        // 2) перевіримо, що пароль і підтвердження збігаються
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             br.rejectValue("confirmPassword", "password.no_match", "Паролі не співпадають");
             return "register";
         }
-        // 3) реєструємо; якщо логін зайнятий — ловимо виключення
         try {
             userService.registerNew(dto);
         } catch (RuntimeException ex) {
             m.addAttribute("error", ex.getMessage());
             return "register";
         }
-        // успішно — перекидаємо на логін із параметром
         return "redirect:/login?registered";
     }
 }

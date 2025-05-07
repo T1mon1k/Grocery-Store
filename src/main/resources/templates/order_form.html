@@ -10,11 +10,8 @@
 <div th:replace="fragments/header :: siteHeader"></div>
 <div th:if="${errorMessage}" class="fun-alert" th:text="${errorMessage}"></div>
 
-
-
 <div class="order-container">
     <h2>Оформлення замовлення</h2>
-
     <form th:action="@{/orders/submit}" method="post">
         <label for="name">Ім’я:</label>
         <input type="text" name="name" id="name" required>

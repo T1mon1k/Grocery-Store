@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(u.getUsername())
                 .password(u.getPassword())
-                .roles(u.getRole().name().substring(5))  // видаляємо префікс "ROLE_"
+                .roles(u.getRole().name().substring(5))
                 .build();
     }
 

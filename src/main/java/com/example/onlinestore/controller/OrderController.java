@@ -26,7 +26,6 @@ public class OrderController {
         this.cartService = cartService;
     }
 
-    // Покажемо форму замовлення (GET /orders/new)
     @GetMapping("/new")
     public String showOrderForm(Model model) {
         model.addAttribute("order", new Order());

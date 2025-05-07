@@ -40,7 +40,6 @@
         <span th:text="${#numbers.formatDecimal(product.averageRating,1,2)} + ' / 5'"></span>
         )</h3>
 
-    <!-- Якщо є відгуки -->
     <ul th:if="${!#lists.isEmpty(reviews)}">
         <li th:each="r : ${reviews}">
             <strong th:text="${r.user.username}">Автор</strong>
@@ -53,10 +52,8 @@
         </li>
     </ul>
 
-    <!-- Якщо відгуків ще немає -->
     <p th:if="${#lists.isEmpty(reviews)}">Поки що немає відгуків.</p>
 
-    <!-- Форма тільки для аутентифікованих -->
     <div sec:authorize="isAuthenticated()">
         <form th:action="@{/products/{id}/reviews(id=${product.id})}" method="post">
             <label>Оцінка:
@@ -75,7 +72,6 @@
         <p><a th:href="@{/login}">Увійдіть</a>, щоб залишити відгук.</p>
     </div>
 </section>
-
 
 <div style="text-align: center; margin-top: 20px;">
     <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary">Редагувати</a>

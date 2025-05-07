@@ -1,4 +1,3 @@
-// src/main/java/com/example/onlinestore/entity/OrderStatus.java
 package com.example.onlinestore.entity;
 
 public enum OrderStatus {

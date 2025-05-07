@@ -17,21 +17,17 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    // 🔗 Зв'язок з користувачем
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // 🕓 Дата створення
     @Column(name = "order_date", nullable = false, updatable = false)
     private LocalDateTime orderDate;
 
-    // 📦 Статус (ENUM)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private OrderStatus status;
 
-    // 💰 Загальна сума
     @Column(name = "total_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalPrice;
 
@@ -45,14 +41,12 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus OrderStatus;
 
-    // 🔧 Ініціалізація
     public Order() {
         this.orderDate = LocalDateTime.now();
         this.status = OrderStatus.CREATED;
         this.totalPrice = BigDecimal.ZERO;
     }
 
-    // ====== Геттери/Сеттери ======
     public Long getId() { return id; }
     public User getUser() { return user; }
     public LocalDateTime getOrderDate() { return orderDate; }

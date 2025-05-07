@@ -30,7 +30,6 @@
         </form>
     </div>
 
-    <!-- Права частина: Пошук і фільтри -->
     <form th:action="@{/products}" method="get" class="filter-form">
         <input type="text" name="keyword" th:value="${keyword}" placeholder="Пошук по назві..." />
         <select name="categoryId">

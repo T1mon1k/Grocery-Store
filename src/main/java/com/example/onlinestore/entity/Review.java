@@ -11,25 +11,20 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Автор відгуку
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Товар
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // Оцінка 0–5
     @Column(nullable = false)
     private int rating;
 
-    // Текст відгуку
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    // Дата створення
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -38,7 +33,6 @@ public class Review {
         createdAt = LocalDateTime.now();
     }
 
-    // ========== Гетери ==========
     public Long getId() {
         return id;
     }
@@ -63,7 +57,6 @@ public class Review {
         return createdAt;
     }
 
-    // ========== Сетери ==========
     public void setId(Long id) {
         this.id = id;
     }

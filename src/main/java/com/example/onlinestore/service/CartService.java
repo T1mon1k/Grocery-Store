@@ -33,17 +33,6 @@ public class CartService {
         this.userRepository = userRepository;
     }
 
-    public Cart getOrCreateCart(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Користувача не знайдено"));
-        return cartRepository.findByUser(user)
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUser(user);
-                    return cartRepository.save(newCart);
-                });
-    }
-
     public Cart addItemForCurrentUser(Long productId, int quantity, Principal principal) {
         String username = principal.getName();
         User user = userRepository.findByUsername(username)
@@ -85,49 +74,10 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Кошик не знайдено: " + cartId));
     }
 
-
-    public Cart addItemToCart(Long cartId, Long productId, int quantity) {
-        Cart cart = getCart(cartId);
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Продукт не знайдено: " + productId));
-
-        Optional<CartItem> existingItemOpt = cart.getItems().stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst();
-
-        if (existingItemOpt.isPresent()) {
-            CartItem existingItem = existingItemOpt.get();
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setCart(cart);
-            newItem.setProduct(product);
-            newItem.setQuantity(quantity);
-            cart.getItems().add(newItem);
-        }
-
-        return cartRepository.save(cart);
-    }
-
     public void clearCart(Long cartId) {
         Cart cart = getCart(cartId);
         cart.getItems().clear();
         cartRepository.save(cart);
-    }
-
-    public BigDecimal getTotal(Long cartId) {
-        Cart cart = getCart(cartId);
-        return cart.getTotal();
-    }
-
-    public Cart getOrCreateCartForUser(User user) {
-        Optional<Cart> existing = cartRepository.findByUser(user);
-        if (existing.isPresent()) {
-            return existing.get();
-        }
-        Cart newCart = new Cart();
-        newCart.setUser(user);
-        return cartRepository.save(newCart);
     }
 
     public void updateQuantities(Map<String, String> allParams) {

@@ -5,12 +5,10 @@
     <div class="logo">
         <a th:href="@{/}">FoodMarket</a>
     </div>
-
     <ul class="menu">
         <li><a th:href="@{/}">Головна</a></li>
         <li><a th:href="@{/products}">Каталог</a></li>
         <li><a th:href="@{/orders/user_orders}">Мої замовлення</a></li>
-        <!-- видно тільки адміну -->
         <li sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/admin}">Панель керування</a>
         </li>
@@ -18,8 +16,6 @@
             <a th:href="@{/cart}">🛒 Кошик</a>
         </li>
     </ul>
-
-
     <div class="spacer"></div>
     <div class="auth-links" sec:authorize="isAnonymous()">
         <a th:href="@{/login}" class="btn-small">Вхід</a>

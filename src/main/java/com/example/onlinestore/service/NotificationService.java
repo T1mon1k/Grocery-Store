@@ -19,9 +19,6 @@ public class NotificationService {
         this.mailSender = mailSender;
     }
 
-    /**
-     * Відправляє HTML-лист з деталями замовлення
-     */
     public void sendOrderConfirmation(Order order) {
         try {
             MimeMessage mime = mailSender.createMimeMessage();
@@ -29,7 +26,6 @@ public class NotificationService {
             helper.setTo(order.getUser().getEmail());
             helper.setSubject("Підтвердження замовлення №" + order.getId());
 
-            // будуємо HTML тіло
             StringBuilder html = new StringBuilder();
             html.append("<html><body>")
                     .append("👋 Доброго дня, ")

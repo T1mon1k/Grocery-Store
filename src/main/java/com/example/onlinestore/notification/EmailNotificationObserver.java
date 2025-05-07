@@ -1,4 +1,3 @@
-// src/main/java/com/example/onlinestore/notification/EmailNotificationObserver.java
 package com.example.onlinestore.notification;
 
 import com.example.onlinestore.entity.Order;
@@ -23,10 +22,8 @@ public class EmailNotificationObserver implements OrderObserver {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(order.getUser().getEmail());
 
-        // Тема з емоджі
         msg.setSubject("🔔 Замовлення №" + order.getId() + " — " + newStatus.getDisplayName());
 
-        // Будуємо тіло листа
         StringBuilder text = new StringBuilder();
         text.append("👋 Доброго дня, ")
                 .append(order.getUser().getUsername())
@@ -53,11 +50,10 @@ public class EmailNotificationObserver implements OrderObserver {
                         .toString().replace("T"," "))
                 .append("\n\n");
 
-        text.append("<p>Якщо у вас є питання — відповідайте на цей лист.</p>");
+        text.append("Якщо у вас є питання — відповідайте на цей лист.");
         text.append("Дякуємо, що обираєте FoodMarket! ❤️\n");
 
         msg.setText(text.toString());
         mailSender.send(msg);
     }
-
 }

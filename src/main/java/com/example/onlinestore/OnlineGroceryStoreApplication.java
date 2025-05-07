@@ -31,7 +31,6 @@ public class OnlineGroceryStoreApplication {
 						.role(Role.ROLE_ADMIN)
 						.build();
 				userRepo.save(admin);
-				System.out.println("Admin user created: admin / adminpass");
 			}
 		};
 	}
