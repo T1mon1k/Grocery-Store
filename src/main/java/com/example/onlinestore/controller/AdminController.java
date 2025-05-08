@@ -47,7 +47,7 @@ public class AdminController {
         List<Order> orders = orderService.getAllOrders();
 
         model.addAttribute("users", users);
-        model.addAttribute("roles", List.of("ROLE_USER", "ROLE_ADMIN"));
+        model.addAttribute("roles", Role.values());
         model.addAttribute("orders", orders);
 
         return "admin";

@@ -26,7 +26,7 @@
         <tr th:each="u : ${users}">
             <td th:text="${u.username}">username</td>
             <td th:text="${u.email}">email</td>
-            <td th:text="${u.role}">ROLE_USER</td>
+            <td th:text="${u.role.displayName}">Користувач</td>
             <td>
                 <div th:if="${u.username == 'admin'}">
                     <em>Головний адміністратор</em>
@@ -38,9 +38,10 @@
                     <input type="hidden" name="userId" th:value="${u.id}"/>
                     <select name="role">
                         <option th:each="r : ${roles}"
-                                th:value="${r}"
-                                th:text="${r}"
-                                th:selected="${r} == ${u.role}"></option>
+                                th:value="${r.name()}"
+                                th:text="${r.displayName}"
+                                th:selected="${r.name() == u.role.name()}">
+                        </option>
                     </select>
                     <button type="submit" class="btn-small">Змінити</button>
                 </form>
