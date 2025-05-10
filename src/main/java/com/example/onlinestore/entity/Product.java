@@ -1,5 +1,6 @@
 package com.example.onlinestore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class Product {
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // @JsonIgnore
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 

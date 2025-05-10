@@ -18,7 +18,10 @@ public class UserService implements UserDetailsService {
 
     public User registerNew(UserDto dto) {
         if (userRepo.findByUsername(dto.getUsername()).isPresent()) {
-            throw new RuntimeException("Username taken");
+            throw new RuntimeException("Ім'я користувача вже зайняте");
+        }
+        if (userRepo.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Ця електронна пошта вже використовується");
         }
         User u = User.builder()
                 .username(dto.getUsername())

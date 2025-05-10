@@ -38,9 +38,13 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE"
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
+	testImplementation 'org.mockito:mockito-core'
+	testImplementation 'org.mockito:mockito-junit-jupiter'
+	testImplementation 'org.springframework:spring-test'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	jvmArgs += ["--add-opens", "java.base/java.lang=ALL-UNNAMED"]
 }
+
