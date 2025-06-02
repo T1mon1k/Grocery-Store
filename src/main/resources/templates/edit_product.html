@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
 <div class="container">
     <div class="form-card">
         <h2>Редагування товару</h2>
@@ -33,6 +34,15 @@
                 <select id="priceType" name="priceType" required>
                     <option value="PER_UNIT" th:selected="${product.priceType == 'PER_UNIT'}">за штуку</option>
                     <option value="PER_KG" th:selected="${product.priceType == 'PER_KG'}">за кілограм</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Категорія:</label>
+                <select id="category" name="categoryId">
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.name}">Категорія</option>
                 </select>
             </div>
 

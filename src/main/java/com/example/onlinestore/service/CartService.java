@@ -8,8 +8,9 @@ import com.example.onlinestore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.Collections;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,9 +65,22 @@ public class CartService {
     }
 
     public List<CartItem> getUserCartItems(String username) {
-        Cart cart = cartRepository.findByUserUsername(username)
-                .orElseThrow(() -> new RuntimeException("Кошик не знайдено"));
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) return Collections.emptyList();
+
+        User user = userOpt.get();
+        Cart cart = getOrCreateCart(user);
         return cart.getItems();
+    }
+
+    private Cart getOrCreateCart(User user) {
+        return cartRepository.findByUser(user)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(user);
+                    newCart.setItems(new ArrayList<>());
+                    return cartRepository.save(newCart);
+                });
     }
 
     public Cart getCart(Long cartId) {

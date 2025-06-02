@@ -35,4 +35,8 @@ public class CategoryService {
         return repo.findByName(name);
     }
 
+    public Category getById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Категорію не знайдено: " + id));
+    }
 }

@@ -36,14 +36,16 @@
                       method="post"
                       style="display:inline">
                     <input type="hidden" name="userId" th:value="${u.id}"/>
-                    <select name="role">
-                        <option th:each="r : ${roles}"
-                                th:value="${r.name()}"
-                                th:text="${r.displayName}"
-                                th:selected="${r.name() == u.role.name()}">
-                        </option>
-                    </select>
-                    <button type="submit" class="btn-small">Змінити</button>
+                    <div class="role-inline">
+                        <select name="role">
+                            <option th:each="r : ${roles}"
+                                    th:value="${r.name()}"
+                                    th:text="${r.displayName}"
+                                    th:selected="${r.name() == u.role.name()}">
+                            </option>
+                        </select>
+                        <button type="submit" class="btn-small">Змінити</button>
+                    </div>
                 </form>
             </td>
         </tr>

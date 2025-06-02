@@ -147,8 +147,9 @@ public class ViewProductController {
 
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Long id, Model model) {
-        Product product = productService.getById(id); // або через репозиторій
+        Product product = productService.getById(id);
         model.addAttribute("product", product);
+        model.addAttribute("categories", categoryService.findAll());
         return "edit_product";
     }
 
@@ -157,6 +158,7 @@ public class ViewProductController {
                                 @RequestParam String name,
                                 @RequestParam(required = false) String description,
                                 @RequestParam BigDecimal price,
+                                @RequestParam Long categoryId,
                                 @RequestParam(required = false) Double weight,
                                 @RequestParam(required = false) String originCountry,
                                 @RequestParam(required = false) String composition,
@@ -165,9 +167,11 @@ public class ViewProductController {
                                 @RequestParam PriceType priceType,
                                 @RequestParam(required = false) Double volumeInLiters) {
         Product product = productService.getById(id);
+        Category category = categoryService.getById(categoryId);
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
+        product.setCategory(category);
         product.setWeight(weight);
         product.setOriginCountry(originCountry);
         product.setComposition(composition);
