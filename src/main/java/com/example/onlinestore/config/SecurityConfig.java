@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import org.springframework.http.HttpMethod;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
